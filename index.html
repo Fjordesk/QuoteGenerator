@@ -1,0 +1,2314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liberty Nordic Quotation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- jsPDF and html2canvas CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="pdf-content-wrapper"> <!-- Added wrapper -->
+  <header>
+    <!-- Banner image is set via CSS background -->
+  </header>
+
+  <div class="ribbon">
+    <label for="quotationNumber">QUOTATION #</label>
+    <select id="quotationNumber" name="quotationNumber">
+        <option value="1">1</option>
+        <option value="2" selected>2</option> <!-- Default to 2 as per original -->
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <!-- Add more options as needed -->
+    </select>
+  </div>
+
+  <div class="container">
+    <section class="card">
+      <div class="grid grid-two-col compact-section">
+      <label for="groupName">GROUP NAME:</label>
+        <input type="text" id="groupName" name="groupName" class="pdf-plain-text" value="#12871SE - AD Medic Tours" />
+
+      <label for="destination">DESTINATION:</label>
+        <input type="text" id="destination" name="destination" class="pdf-plain-text destination-autocomplete" value="Gothenburg, Sweden" />
+
+        <label>DATES:</label>
+        <div class="dates-container">
+          <div class="date-inputs">
+            <input type="date" id="arrivalDate" name="arrivalDate" class="date-input" />
+            <span>to</span>
+            <input type="date" id="departureDate" name="departureDate" class="date-input" />
+            <span class="duration-display">(<span id="durationDays">0 days (0 nights)</span>)</span>
+          </div>
+        </div>
+
+        <label>PAX & ROOMS:</label>
+        <div class="rooms-container">
+          <div class="room-inputs">
+            <div class="room-input-group">
+              <label class="small-label">PAX:</label>
+              <input type="number" id="paxCount" min="1" class="small-input" />
+            </div>
+            <div class="room-input-group">
+              <label class="small-label">Single Rooms:</label>
+              <input type="number" id="singleRooms" min="0" class="small-input" />
+            </div>
+            <div class="room-input-group">
+              <label class="small-label">Double Rooms:</label>
+              <input type="number" id="doubleRooms" min="0" class="small-input" />
+            </div>
+          </div>
+        </div>
+
+      <label for="incomingContact">INCOMING CONTACT:</label>
+        <input type="text" id="incomingContact" name="incomingContact" class="pdf-plain-text" value="Gérald Amoudruz" />
+
+        <label for="clientContact">CLIENT CONTACT:</label>
+        <input type="text" id="clientContact" class="pdf-plain-text" value="Rita Luis" />
+
+        <label for="libertyContact">LIBERTY CONTACT:</label>
+        <input type="text" id="libertyContact" class="pdf-plain-text" value="Gérald Amoudruz, CEO" />
+    </div>
+
+      <hr class="section-divider" />
+
+      <div class="grid grid-two-col compact-section">
+        <label class="section-label">PRICING MODEL</label>
+        <div></div>
+        
+        <label for="currency">CURRENCY:</label>
+        <div class="currency-select-wrapper">
+          <select id="currency" class="compact-select">
+              <option selected>SEK</option>
+        <option>DKK</option>
+        <option>NOK</option>
+        <option>EUR</option>
+        <option>USD</option>
+        <option>GBP</option>
+      </select>
+    </div>
+        <label></label>
+        <p class="text-muted no-margin">VAT NOT RECLAIMED</p>
+        <label></label>
+        <p class="text-highlight no-margin">NET RATES, inclusive of Taxes, VAT, Service Charges and Liberty handling fees.</p>
+      </div>
+
+      <hr class="section-divider" />
+
+      <div class="commission-options compact-section">
+        <div>
+            <input type="radio" id="nonCommission" name="commission" value="non" checked />
+            <label for="nonCommission">NON COMMISSIONABLE RATES</label>
+        </div>
+        <div>
+            <input type="radio" id="commissionable" name="commission" value="yes" />
+            <label for="commissionable">COMMISSIONABLE RATES:</label>
+            <span>Commissionable at: <input type="number" id="commissionRate" style="width: 70px;" value="0" min="0" max="100" step="0.1" /> %</span>
+            <span class="text-muted">(only if applicable to all below rates)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+    <h2>HOTELS</h2>
+      <div class="table-wrapper">
+        <table class="hotels-table" id="hotelsTable">
+          <colgroup>
+            <col style="width: 35%"> <!-- Increased room type column width -->
+            <col style="width: 10%">
+            <col style="width: 10%">
+            <col style="width: 12%">
+            <col style="width: 13%">
+            <col style="width: 20%"> <!-- Remarks column -->
+          </colgroup>
+      <thead>
+        <tr>
+              <th>HOTELS</th>
+              <th>Nights</th>
+              <th>Units</th>
+              <th>Price per unit</th>
+              <th>Total</th>
+              <th>Remarks</th>
+        </tr>
+      </thead>
+          <tbody id="hotelsTableBody">
+            <!-- Template row that will be cloned by JavaScript -->
+            <template id="hotelRowTemplate">
+              <tr class="hotel-row">
+                <td class="room-type-cell">
+                  <select class="room-type-select">
+                    <option value="">Select Room Type</option>
+                    <option value="single">Single Room</option>
+                    <option value="double">Double Room</option>
+                    <option value="twin">Twin Room</option>
+                    <option value="suite">Suite Room</option>
+                    <option value="executive">Executive Room</option>
+                  </select>
+                  <input type="text" class="room-description" placeholder="Additional Description" />
+                </td>
+                <td><input type="number" class="nights" min="1" /></td>
+                <td><input type="number" class="units" value="1" min="1" /></td>
+                <td><input type="number" class="price" value="0.00" min="0" step="0.01" /></td>
+                <td><input type="number" class="total" readonly /></td>
+                <td>
+                  <div class="remarks-container">
+                    <input type="text" class="remarks-input" placeholder="Enter remarks">
+                    <button class="remove-room-btn" title="Remove Room">&times;</button>
+                  </div>
+                </td>
+        </tr>
+            </template>
+
+            <template id="hotelComponentTemplate">
+              <tr class="hotel-header">
+                <td colspan="5">
+                  <div class="hotel-header-content">
+                    <input type="radio" name="selectedHotel" class="hotel-selector" />
+                    <input type="text" class="header-input" placeholder="HOTEL NAME" />
+                    <div class="url-container">
+                      <button class="url-icon" title="Add Hotel URL">🔗</button>
+                      <input type="url" class="hotel-url" placeholder="Hotel URL" style="display: none;" />
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="remarks-container">
+                    <input type="text" class="remarks-input" placeholder="Hotel remarks">
+                    <button class="delete-hotel-btn" title="Delete Hotel">&times;</button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hotel-actions">
+                <td colspan="6">
+                  <button type="button" class="add-room-btn">+ Add Room</button>
+                </td>
+              </tr>
+            </template>
+      </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="4" id="totalLabel" style="background-color: #1a237e; color: white; padding-left: 1em;">HOTEL COST BASED ON SELECTED HOTEL</td>
+              <td id="grandTotal" style="background-color: #ffa500; color: white; font-weight: bold; text-align: right; padding-right: 1em;">0.00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+    </table>
+      </div>
+
+      <button type="button" id="addHotelBtn" class="add-hotel-button">
+        + Add Hotel
+      </button>
+      <script src="script.js"></script>
+    </section>
+
+    <section class="card">
+      <h2>SERVICES - DAY BY DAY</h2>
+      <div class="table-wrapper">
+        <table class="services-table" id="servicesTable">
+          <colgroup>
+            <col style="width: 35%"> <!-- Service type -->
+            <col style="width: 10%"> <!-- Days -->
+            <col style="width: 10%"> <!-- Units -->
+            <col style="width: 12%"> <!-- Price -->
+            <col style="width: 13%"> <!-- Total -->
+            <col style="width: 20%"> <!-- Remarks -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th>SERVICES</th>
+              <th>Days</th>
+              <th>Units</th>
+              <th>Price per unit</th>
+              <th>Total</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="4" id="servicesTotalLabel" style="background-color: #1a237e; color: white; padding-left: 1em;">COST BASED ON ALL SERVICES</td>
+              <td id="servicesGrandTotal" style="background-color: #ffa500; color: white; font-weight: bold; text-align: right; padding-right: 1em;">0.00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <button type="button" id="addDayBtn" class="add-day-button">
+        + Add Day
+      </button>
+    </section>
+
+    <section class="card">
+      <h2>LIBERTY SERVICES</h2>
+      <div class="table-wrapper">
+        <table class="services-table" id="libertyServicesTable">
+          <colgroup>
+            <col style="width: 35%"> <!-- Service type -->
+            <col style="width: 10%"> <!-- Days -->
+            <col style="width: 10%"> <!-- Units -->
+            <col style="width: 12%"> <!-- Price -->
+            <col style="width: 13%"> <!-- Total -->
+            <col style="width: 20%"> <!-- Remarks -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Agency Remuneration</th>
+              <th>Days</th>
+              <th>Units</th>
+              <th>Price per unit</th>
+              <th>Total</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="4" id="libertyServicesTotalLabel" style="background-color: #1a237e; color: white; padding-left: 1em;">COST BASED ON ALL LIBERTY SERVICES</td>
+              <td id="libertyServicesGrandTotal" style="background-color: #ffa500; color: white; font-weight: bold; text-align: right; padding-right: 1em;">0.00</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <button type="button" id="addLibertyDayBtn" class="add-day-button">
+        + Add Category
+      </button>
+    </section>
+
+    <!-- Add templates -->
+    <template id="dayComponentTemplate">
+      <tbody class="day-component">
+        <tr class="day-header">
+          <td colspan="5">
+            <div class="day-header-content">
+              <input type="text" class="header-input" placeholder="DAY TITLE"/>
+              <button class="delete-day-btn" title="Delete Day">&times;</button>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="day-actions">
+          <td colspan="6">
+            <button type="button" class="add-service-btn">+ Add Service</button>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+
+    <template id="serviceRowTemplate">
+      <tr class="service-row">
+        <td class="service-type-cell">
+          <select class="service-type-select">
+            <option value="">Select Service</option>
+            <option value="transfer">Transfer</option>
+            <option value="guide">Assistance</option>
+            <option value="meal">Lunch</option>
+            <option value="meal">Dinner</option>
+            <option value="activity">Activity</option>
+            <option value="entrance">Entrance Fee</option>
+          </select>
+          <input type="text" class="service-description" placeholder="Additional Description" />
+        </td>
+        <td><input type="number" class="days" min="1" /></td>
+        <td><input type="number" class="units" value="1" min="1" /></td>
+        <td><input type="number" class="price" value="0.00" min="0" step="0.01" /></td>
+        <td><input type="number" class="total" readonly /></td>
+        <td>
+          <div class="remarks-container">
+            <input type="text" class="remarks-input" placeholder="Enter remarks">
+            <button class="remove-service-btn" title="Remove Service">&times;</button>
+          </div>
+        </td>
+      </tr>
+    </template>
+
+    <template id="libertyDayComponentTemplate">
+      <tbody class="day-component">
+        <tr class="day-header">
+          <td colspan="5">
+            <div class="day-header-content">
+              <input type="text" class="header-input" placeholder="SERVICE CATEGORY"/>
+              <button class="delete-day-btn" title="Delete Day">&times;</button>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr class="day-actions">
+          <td colspan="6">
+            <button type="button" class="add-service-btn">+ Add Service</button>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+
+    <template id="libertyServiceRowTemplate">
+      <tr class="service-row">
+        <td class="service-type-cell">
+          <select class="service-type-select">
+            <option value="">Select Service</option>
+            <option value="transfer">Onsite Co-ordinator</option>
+            <option value="transfer">Onsite Assistance</option>
+            <option value="entrance">Event Co-ordinator</Co-ordinator></option>
+            <option value="guide">Meet & Greet</option>
+            <option value="meal">Photogragher</option>
+            <option value="meal">Speaker</option>
+            <option value="activity">Activity</option>
+        </select>
+          <input type="text" class="service-description" placeholder="Additional Description" />
+        </td>
+        <td><input type="number" class="days" min="1" /></td>
+        <td><input type="number" class="units" value="1" min="1" /></td>
+        <td><input type="number" class="price" value="0.00" min="0" step="0.01" /></td>
+        <td><input type="number" class="total" readonly /></td>
+        <td>
+          <div class="remarks-container">
+            <input type="text" class="remarks-input" placeholder="Enter remarks">
+            <button class="remove-service-btn" title="Remove Service">&times;</button>
+          </div>
+        </td>
+      </tr>
+    </template>
+
+    <style>
+      .day-header {
+        background-color: var(--primary-color);
+      }
+
+      .day-header-content {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.3em 0.6em;
+        min-height: 2em;
+        width: 100%;
+      }
+
+      .day-header .header-input {
+        flex: 1;
+        color: white;
+        font-weight: 600;
+        font-size: 0.85em;
+        background: transparent;
+        border: none;
+        padding: 0.1em 0;
+      }
+
+      .day-header .header-input::placeholder {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .day-header .delete-day-btn {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 0.1em 0.3em;
+        font-size: 1.1em;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      .day-header .delete-day-btn:hover {
+        opacity: 1;
+      }
+
+      .day-header .day-selector {
+        margin: 0;
+        cursor: pointer;
+      }
+
+      .day-actions {
+        background-color: #f8f9fa;
+      }
+
+      .add-service-btn {
+        background: none;
+        border: none;
+        color: var(--accent-color);
+        cursor: pointer;
+        font-size: 0.9em;
+        padding: 0.3em 0.6em;
+        border-radius: 4px;
+        transition: all 0.2s;
+      }
+
+      .add-service-btn:hover {
+        background-color: var(--accent-color);
+        color: white;
+      }
+
+      .add-day-button {
+        margin-top: 1em;
+        padding: 0.5em 1em;
+        background-color: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9em;
+      }
+
+      .add-day-button:hover {
+        opacity: 0.9;
+      }
+
+      .hotel-row input:not([type="radio"]),
+      .hotel-row select,
+      .service-row input:not([type="radio"]),
+      .service-row select {
+        width: 100%;
+        padding: 0.3em;
+        border: 1px solid transparent;
+        background: transparent;
+        font-size: inherit;
+        font-family: inherit;
+      }
+
+      .hotel-row input:focus,
+      .hotel-row select:focus,
+      .service-row input:focus,
+      .service-row select:focus {
+        border-color: var(--accent-color);
+        background: white;
+        outline: none;
+      }
+
+      .room-type-cell,
+      .service-type-cell {
+        display: flex;
+        gap: 0.4em;
+      }
+
+      .room-type-cell .room-type-select,
+      .room-type-cell .room-description,
+      .service-type-cell .service-type-select,
+      .service-type-cell .service-description {
+        width: 50%;
+        padding: 0.3em;
+        border: 1px solid transparent;
+        background: transparent;
+        font-size: inherit;
+        font-family: inherit;
+      }
+
+      .room-type-cell .room-type-select:focus,
+      .room-type-cell .room-description:focus,
+      .service-type-cell .service-type-select:focus,
+      .service-type-cell .service-description:focus {
+        border-color: var(--accent-color);
+        background: white;
+        outline: none;
+      }
+
+      .room-type-cell .room-type-select,
+      .service-type-cell .service-type-select {
+        min-width: 80px;
+      }
+
+      .hotel-row .remarks-container,
+      .service-row .remarks-container {
+        display: flex;
+        align-items: center;
+        gap: 0.3em;
+        width: 100%;
+      }
+
+      .hotel-row .remarks-input,
+      .service-row .remarks-input {
+        flex: 1;
+        padding: 0.3em;
+        border: 1px solid transparent;
+        background: transparent;
+        font-size: inherit;
+        font-family: inherit;
+      }
+
+      .hotel-row .remarks-input:focus,
+      .service-row .remarks-input:focus {
+        border-color: var(--accent-color);
+        background: white;
+        outline: none;
+      }
+
+      .hotel-row .remove-room-btn,
+      .service-row .remove-service-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        padding: 0.1em 0.3em;
+        font-size: 1.1em;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+
+      .hotel-row .remove-room-btn:hover,
+      .service-row .remove-service-btn:hover {
+        opacity: 1;
+      }
+
+      /* Add styles for services total row */
+      .services-table .total-row {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+      }
+
+      .services-table .total-row td {
+        padding: 0.5em;
+        border: none;
+      }
+
+      .services-table #servicesGrandTotal {
+        text-align: right;
+        padding-right: 1em;
+      }
+
+      /* Update hotel total row styles */
+      .hotels-table .total-row {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 600;
+      }
+
+      .hotels-table .total-row td {
+        padding: 0.5em;
+        border: none;
+      }
+
+      .hotels-table #grandTotal {
+        text-align: right;
+        padding-right: 1em;
+      }
+    </style>
+
+    <script>
+      // Services functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const servicesTable = document.getElementById('servicesTable');
+        const addDayBtn = document.getElementById('addDayBtn');
+
+        function calculateAllServicesTotal() {
+          let grandTotal = 0;
+          const serviceRows = document.querySelectorAll('.service-row');
+          serviceRows.forEach(row => {
+            const total = parseFloat(row.querySelector('.total').value) || 0;
+            grandTotal += total;
+          });
+          const servicesGrandTotal = document.getElementById('servicesGrandTotal');
+          if (servicesGrandTotal) {
+            servicesGrandTotal.textContent = grandTotal.toFixed(2);
+          }
+          return grandTotal;
+        }
+
+        function calculateServiceTotal(row) {
+          const days = parseFloat(row.querySelector('.days').value) || 0;
+          const units = parseFloat(row.querySelector('.units').value) || 0;
+          const price = parseFloat(row.querySelector('.price').value) || 0;
+          const total = days * units * price;
+          row.querySelector('.total').value = total.toFixed(2);
+          calculateAllServicesTotal();
+        }
+
+        function createServiceRow(dayComponent) {
+          const template = document.getElementById('serviceRowTemplate');
+          const clone = template.content.cloneNode(true);
+          const row = clone.querySelector('.service-row');
+          
+          row.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', () => {
+              calculateServiceTotal(row);
+              calculateAllServicesTotal();
+            });
+          });
+          
+          const removeBtn = row.querySelector('.remove-service-btn');
+          removeBtn.addEventListener('click', () => {
+            const serviceRows = dayComponent.querySelectorAll('.service-row');
+            if (serviceRows.length > 1) {
+              row.remove();
+              calculateAllServicesTotal();
+            }
+          });
+          
+          const actionsRow = dayComponent.querySelector('.day-actions');
+          actionsRow.parentNode.insertBefore(row, actionsRow);
+          
+          return row;
+        }
+
+        function addDayComponent() {
+          const template = document.getElementById('dayComponentTemplate');
+          const clone = template.content.cloneNode(true);
+          const dayComponent = clone.querySelector('.day-component');
+          
+          const addServiceBtn = dayComponent.querySelector('.add-service-btn');
+          addServiceBtn.addEventListener('click', () => {
+            createServiceRow(dayComponent);
+          });
+          
+          const headerInput = dayComponent.querySelector('.header-input');
+          
+          const deleteBtn = dayComponent.querySelector('.delete-day-btn');
+          deleteBtn.addEventListener('click', function() {
+            dayComponent.remove();
+            calculateAllServicesTotal();
+          });
+          
+          servicesTable.appendChild(dayComponent);
+          createServiceRow(dayComponent);
+        }
+
+        addDayBtn.addEventListener('click', addDayComponent);
+        addDayComponent();
+      });
+
+      // Liberty Services functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const libertyServicesTable = document.getElementById('libertyServicesTable');
+        const addLibertyDayBtn = document.getElementById('addLibertyDayBtn');
+
+        function calculateAllLibertyServicesTotal() {
+          let grandTotal = 0;
+          const serviceRows = libertyServicesTable.querySelectorAll('.service-row');
+          serviceRows.forEach(row => {
+            const total = parseFloat(row.querySelector('.total').value) || 0;
+            grandTotal += total;
+          });
+          const libertyServicesGrandTotal = document.getElementById('libertyServicesGrandTotal');
+          if (libertyServicesGrandTotal) {
+            libertyServicesGrandTotal.textContent = grandTotal.toFixed(2);
+          }
+          return grandTotal;
+        }
+
+        function calculateLibertyServiceTotal(row) {
+          const days = parseFloat(row.querySelector('.days').value) || 0;
+          const units = parseFloat(row.querySelector('.units').value) || 0;
+          const price = parseFloat(row.querySelector('.price').value) || 0;
+          const total = days * units * price;
+          row.querySelector('.total').value = total.toFixed(2);
+          calculateAllLibertyServicesTotal();
+        }
+
+        function createLibertyServiceRow(dayComponent) {
+          const template = document.getElementById('libertyServiceRowTemplate');
+          const clone = template.content.cloneNode(true);
+          const row = clone.querySelector('.service-row');
+          
+          row.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', () => {
+              calculateLibertyServiceTotal(row);
+              calculateAllLibertyServicesTotal();
+            });
+          });
+          
+          const removeBtn = row.querySelector('.remove-service-btn');
+          removeBtn.addEventListener('click', () => {
+            const serviceRows = dayComponent.querySelectorAll('.service-row');
+            if (serviceRows.length > 1) {
+              row.remove();
+              calculateAllLibertyServicesTotal();
+            }
+          });
+          
+          const actionsRow = dayComponent.querySelector('.day-actions');
+          actionsRow.parentNode.insertBefore(row, actionsRow);
+          
+          return row;
+        }
+
+        function addLibertyDayComponent() {
+          const template = document.getElementById('libertyDayComponentTemplate');
+          const clone = template.content.cloneNode(true);
+          const dayComponent = clone.querySelector('.day-component');
+          
+          const addServiceBtn = dayComponent.querySelector('.add-service-btn');
+          addServiceBtn.addEventListener('click', () => {
+            createLibertyServiceRow(dayComponent);
+          });
+          
+          const headerInput = dayComponent.querySelector('.header-input');
+          
+          const deleteBtn = dayComponent.querySelector('.delete-day-btn');
+          deleteBtn.addEventListener('click', function() {
+            dayComponent.remove();
+            calculateAllLibertyServicesTotal();
+          });
+          
+          libertyServicesTable.appendChild(dayComponent);
+          createLibertyServiceRow(dayComponent);
+        }
+
+        addLibertyDayBtn.addEventListener('click', addLibertyDayComponent);
+        addLibertyDayComponent(); // Create initial day component
+      });
+
+      // Local Storage Functions
+      const STORAGE_KEY = 'libertyQuotationData';
+
+      function saveToLocalStorage() {
+        const data = {
+          // Basic form data
+          basicInfo: {
+            quotationNumber: document.getElementById('quotationNumber').value,
+            groupName: document.getElementById('groupName').value,
+            destination: document.getElementById('destination').value,
+            arrivalDate: document.getElementById('arrivalDate').value,
+            departureDate: document.getElementById('departureDate').value,
+            paxCount: document.getElementById('paxCount').value,
+            singleRooms: document.getElementById('singleRooms').value,
+            doubleRooms: document.getElementById('doubleRooms').value,
+            incomingContact: document.getElementById('incomingContact').value,
+            clientContact: document.getElementById('clientContact').value,
+            libertyContact: document.getElementById('libertyContact').value,
+            currency: document.getElementById('currency').value,
+            commission: document.querySelector('input[name="commission"]:checked').value,
+            commissionRate: document.getElementById('commissionRate').value,
+            quotationDate: document.getElementById('quotationDate').value,
+            clientContactName: document.getElementById('clientContactName').value,
+            clientContactTitle: document.getElementById('clientContactTitle').value,
+          },
+          // Hotels data
+          hotels: Array.from(document.querySelectorAll('.hotel-component')).map(hotel => ({
+            name: hotel.querySelector('.header-input').value,
+            url: hotel.querySelector('.hotel-url').value,
+            isSelected: hotel.querySelector('.hotel-selector').checked,
+            remarks: hotel.querySelector('.remarks-input').value,
+            rooms: Array.from(hotel.querySelectorAll('.hotel-row')).map(room => ({
+              type: room.querySelector('.room-type-select').value,
+              description: room.querySelector('.room-description').value,
+              nights: room.querySelector('.nights').value,
+              units: room.querySelector('.units').value,
+              price: room.querySelector('.price').value,
+              remarks: room.querySelector('.remarks-input').value
+            }))
+          })),
+          // Services data
+          services: Array.from(document.querySelectorAll('#servicesTable .day-component')).map(day => ({
+            title: day.querySelector('.header-input').value,
+            services: Array.from(day.querySelectorAll('.service-row')).map(service => ({
+              type: service.querySelector('.service-type-select').value,
+              description: service.querySelector('.service-description').value,
+              days: service.querySelector('.days').value,
+              units: service.querySelector('.units').value,
+              price: service.querySelector('.price').value,
+              remarks: service.querySelector('.remarks-input').value
+            }))
+          })),
+          // Liberty Services data
+          libertyServices: Array.from(document.querySelectorAll('#libertyServicesTable .day-component')).map(category => ({
+            title: category.querySelector('.header-input').value,
+            services: Array.from(category.querySelectorAll('.service-row')).map(service => ({
+              type: service.querySelector('.service-type-select').value,
+              description: service.querySelector('.service-description').value,
+              days: service.querySelector('.days').value,
+              units: service.querySelector('.units').value,
+              price: service.querySelector('.price').value,
+              remarks: service.querySelector('.remarks-input').value
+            }))
+          }))
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function loadFromLocalStorage() {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (!savedData) return;
+
+        const data = JSON.parse(savedData);
+
+        // Load basic form data
+        Object.entries(data.basicInfo).forEach(([id, value]) => {
+          const element = document.getElementById(id);
+          if (element) {
+            if (element.type === 'radio') {
+              document.querySelector(`input[name="${element.name}"][value="${value}"]`).checked = true;
+            } else {
+              element.value = value;
+            }
+          }
+        });
+
+        // Load hotels
+        data.hotels.forEach((hotelData, index) => {
+          if (index > 0) { // First hotel component already exists
+            document.getElementById('addHotelBtn').click();
+          }
+          const hotelComponents = document.querySelectorAll('.hotel-component');
+          const currentHotel = hotelComponents[index];
+          
+          currentHotel.querySelector('.header-input').value = hotelData.name;
+          currentHotel.querySelector('.hotel-url').value = hotelData.url;
+          currentHotel.querySelector('.hotel-selector').checked = hotelData.isSelected;
+          currentHotel.querySelector('.remarks-input').value = hotelData.remarks;
+
+          // Load rooms
+          hotelData.rooms.forEach((roomData, roomIndex) => {
+            if (roomIndex > 0) { // First room already exists
+              currentHotel.querySelector('.add-room-btn').click();
+            }
+            const rooms = currentHotel.querySelectorAll('.hotel-row');
+            const currentRoom = rooms[roomIndex];
+            
+            currentRoom.querySelector('.room-type-select').value = roomData.type;
+            currentRoom.querySelector('.room-description').value = roomData.description;
+            currentRoom.querySelector('.nights').value = roomData.nights;
+            currentRoom.querySelector('.units').value = roomData.units;
+            currentRoom.querySelector('.price').value = roomData.price;
+            currentRoom.querySelector('.remarks-input').value = roomData.remarks;
+          });
+        });
+
+        // Load services
+        data.services.forEach((dayData, index) => {
+          if (index > 0) { // First day component already exists
+            document.getElementById('addDayBtn').click();
+          }
+          const dayComponents = document.querySelectorAll('#servicesTable .day-component');
+          const currentDay = dayComponents[index];
+          
+          currentDay.querySelector('.header-input').value = dayData.title;
+
+          // Load services for this day
+          dayData.services.forEach((serviceData, serviceIndex) => {
+            if (serviceIndex > 0) { // First service already exists
+              currentDay.querySelector('.add-service-btn').click();
+            }
+            const services = currentDay.querySelectorAll('.service-row');
+            const currentService = services[serviceIndex];
+            
+            currentService.querySelector('.service-type-select').value = serviceData.type;
+            currentService.querySelector('.service-description').value = serviceData.description;
+            currentService.querySelector('.days').value = serviceData.days;
+            currentService.querySelector('.units').value = serviceData.units;
+            currentService.querySelector('.price').value = serviceData.price;
+            currentService.querySelector('.remarks-input').value = serviceData.remarks;
+          });
+        });
+
+        // Load liberty services
+        data.libertyServices.forEach((categoryData, index) => {
+          if (index > 0) { // First category component already exists
+            document.getElementById('addLibertyDayBtn').click();
+          }
+          const categoryComponents = document.querySelectorAll('#libertyServicesTable .day-component');
+          const currentCategory = categoryComponents[index];
+          
+          currentCategory.querySelector('.header-input').value = categoryData.title;
+
+          // Load services for this category
+          categoryData.services.forEach((serviceData, serviceIndex) => {
+            if (serviceIndex > 0) { // First service already exists
+              currentCategory.querySelector('.add-service-btn').click();
+            }
+            const services = currentCategory.querySelectorAll('.service-row');
+            const currentService = services[serviceIndex];
+            
+            currentService.querySelector('.service-type-select').value = serviceData.type;
+            currentService.querySelector('.service-description').value = serviceData.description;
+            currentService.querySelector('.days').value = serviceData.days;
+            currentService.querySelector('.units').value = serviceData.units;
+            currentService.querySelector('.price').value = serviceData.price;
+            currentService.querySelector('.remarks-input').value = serviceData.remarks;
+          });
+        });
+
+        // Trigger calculations and updates
+        updateDuration();
+        updatePaxCount();
+        updateCostsSummary();
+      }
+
+      // Add event listeners for saving data
+      document.addEventListener('input', saveToLocalStorage);
+      document.addEventListener('change', saveToLocalStorage);
+
+      // Load data when page loads
+      document.addEventListener('DOMContentLoaded', loadFromLocalStorage);
+
+      // Keep existing event listeners and functionality
+      // ... existing code ...
+    </script>
+
+    <section class="card">
+    <h2>COSTS SUMMARY</h2>
+      <div class="costs-summary-wrapper">
+        <table class="costs-summary-table">
+          <tr class="costs-header">
+            <th>COSTS SUMMARY</th>
+            <th>TOTAL</th>
+          </tr>
+          <tr>
+            <td>HOTEL COST<br/><span class="hotel-name" id="selectedHotelName">(Not selected)</span></td>
+            <td class="amount" id="hotelCostCell">0.00</td>
+          </tr>
+          <tr>
+            <td>SERVICES - DAY BY DAY</td>
+            <td class="amount" id="servicesCostCell">0.00</td>
+          </tr>
+          <tr>
+            <td>LIBERTY SERVICES</td>
+            <td class="amount" id="libertyServicesCostCell">0.00</td>
+          </tr>
+          <tr class="total-costs">
+            <td>TOTAL COSTS IN (<span id="summaryCurrency">SEK</span>)</td>
+            <td class="amount" id="totalCostsCell">0.00</td>
+          </tr>
+          <tr class="per-person">
+            <td>TOTAL COSTS per person IN (<span id="perPersonCurrency">SEK</span>)<span class="pax-info">based on pax</span><span class="pax-number" id="summaryPaxCount">0</span></td>
+            <td class="amount" id="perPersonCostCell">0.00</td>
+          </tr>
+        </table>
+      </div>
+
+      <style>
+        .costs-summary-wrapper {
+          margin: 1em 0;
+        }
+
+        .costs-summary-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.9em;
+        }
+
+        .costs-summary-table tr {
+          border: 1px solid #ddd;
+        }
+
+        .costs-summary-table th,
+        .costs-summary-table td {
+          padding: 0.8em 1em;
+        }
+
+        .costs-header {
+          background-color: var(--primary-color);
+          color: white;
+          font-weight: bold;
+        }
+
+        .costs-header th {
+          text-align: left;
+          padding: 1em;
+        }
+
+        .costs-header th:first-child {
+          display: none;
+        }
+
+        .costs-header th:last-child {
+          text-align: right;
+          padding-right: 1em;
+        }
+
+        .hotel-name {
+          font-size: 0.9em;
+          color: #666;
+          display: block;
+          margin-top: 0.2em;
+        }
+
+        .amount {
+          text-align: right;
+          font-weight: 600;
+        }
+
+        .total-costs {
+          background-color: var(--primary-color);
+          color: white;
+          font-weight: bold;
+        }
+
+        .total-costs .amount {
+          background-color: #ffa500;
+          padding-right: 1em;
+        }
+
+        .per-person {
+          background-color: #f5f6fa;
+        }
+
+        .per-person .amount {
+          background-color: #ffa500;
+          padding-right: 1em;
+        }
+
+        .total-costs .amount,
+        .per-person .amount {
+          color: white;
+          font-weight: bold;
+        }
+
+        .pax-info {
+          color: #666;
+          font-size: 0.9em;
+          margin-left: 1em;
+        }
+
+        .pax-number {
+          color: #000;
+          font-weight: bold;
+          margin-left: 0.5em;
+        }
+
+        /* Make regular rows have alternating background */
+        .costs-summary-table tr:nth-child(odd):not(.costs-header):not(.total-costs):not(.per-person) {
+          background-color: #f8f9fa;
+        }
+      </style>
+
+      <script>
+        // Function to format numbers with commas and 2 decimal places
+        function formatNumber(number) {
+          return number.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
+        }
+
+        // Function to update the costs summary
+        function updateCostsSummary() {
+          // Get currency
+          const currency = document.getElementById('currency').value;
+          document.getElementById('summaryCurrency').textContent = currency;
+          document.getElementById('perPersonCurrency').textContent = currency;
+
+          // Get PAX count
+          const paxCount = parseInt(document.getElementById('paxCount').value) || 0;
+          document.getElementById('summaryPaxCount').textContent = paxCount;
+
+          // Get hotel cost from selected hotel
+          const hotelTotal = parseFloat(document.getElementById('grandTotal').textContent) || 0;
+          document.getElementById('hotelCostCell').textContent = formatNumber(hotelTotal);
+
+          // Get selected hotel name
+          const selectedHotel = document.querySelector('.hotel-selector:checked');
+          if (selectedHotel) {
+            const hotelNameInput = selectedHotel.closest('.hotel-header').querySelector('.header-input');
+            document.getElementById('selectedHotelName').textContent = 
+              hotelNameInput.value ? `(Based on ${hotelNameInput.value})` : '(Not selected)';
+          } else {
+            document.getElementById('selectedHotelName').textContent = '(Not selected)';
+          }
+
+          // Get services cost
+          const servicesTotal = parseFloat(document.getElementById('servicesGrandTotal').textContent) || 0;
+          document.getElementById('servicesCostCell').textContent = formatNumber(servicesTotal);
+
+          // Get liberty services cost
+          const libertyServicesTotal = parseFloat(document.getElementById('libertyServicesGrandTotal').textContent) || 0;
+          document.getElementById('libertyServicesCostCell').textContent = formatNumber(libertyServicesTotal);
+
+          // Calculate total costs
+          const totalCosts = hotelTotal + servicesTotal + libertyServicesTotal;
+          document.getElementById('totalCostsCell').textContent = formatNumber(totalCosts);
+
+          // Calculate per person cost
+          const perPersonCost = paxCount > 0 ? totalCosts / paxCount : 0;
+          document.getElementById('perPersonCostCell').textContent = formatNumber(perPersonCost);
+        }
+
+        // Add event listeners to trigger cost summary updates
+        document.addEventListener('DOMContentLoaded', function() {
+          // Listen for currency changes
+          document.getElementById('currency').addEventListener('change', updateCostsSummary);
+
+          // Listen for PAX count changes
+          document.getElementById('paxCount').addEventListener('input', updateCostsSummary);
+
+          // Listen for hotel selection changes
+          document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('hotel-selector') || 
+                e.target.classList.contains('header-input')) {
+              updateCostsSummary();
+            }
+          });
+
+          // Listen for hotel total changes
+          const hotelObserver = new MutationObserver(updateCostsSummary);
+          hotelObserver.observe(document.getElementById('grandTotal'), 
+            { characterData: true, childList: true, subtree: true });
+
+          // Listen for services total changes
+          const servicesObserver = new MutationObserver(updateCostsSummary);
+          servicesObserver.observe(document.getElementById('servicesGrandTotal'), 
+            { characterData: true, childList: true, subtree: true });
+
+          // Listen for liberty services total changes
+          const libertyServicesObserver = new MutationObserver(updateCostsSummary);
+          libertyServicesObserver.observe(document.getElementById('libertyServicesGrandTotal'), 
+            { characterData: true, childList: true, subtree: true });
+
+          // Initial update
+          updateCostsSummary();
+        });
+      </script>
+    </section>
+
+    <section class="card text-section gdpr-section">
+      <h2>GDPR - DATA PROTECTION</h2>
+      <div class="compact-text">
+        <p>The General Data Protection Regulation (GDPR) (EU) 2016/679 is a regulation in EU law on data protection and privacy for all individuals within the European Union. We take the GDPR very serious and therefore our Data Processing Addendum is accessible worldwide via this direct link: <a href="https://www.liberty-int.com/docs/LITG-Data-Processing-Addendum.pdf" target="_blank">Data Processing Addendum</a></p>
+    </div>
+      <style>
+        .gdpr-section {
+          background-color: #f8f9fa;
+          border-left: 4px solid var(--accent-color);
+        }
+
+        .gdpr-section h2 {
+          color: var(--accent-color);
+          font-weight: 600;
+          border-bottom-color: var(--accent-color);
+        }
+
+        .gdpr-section .compact-text {
+          padding: 0.5em 1em;
+        }
+
+        .gdpr-section a {
+          font-weight: 600;
+        }
+      </style>
+    </section>
+
+    <section class="card text-section">
+    <h2>TERMS & CONDITIONS</h2>
+      <div class="compact-text">
+        <p>LIBERTY NORDIC is the appointed DMC for this quote on the dates stated above and will be referred to as "Liberty" in this agreement.</p>
+        <p>The General Terms & Conditions of the Agency LIBERTY INTERNATIONAL TOURISM GROUP and its companies apply.</p>
+        <p>Those are accessible worldwide via the URL: <a href="https://www.liberty-int.com/terms-and-conditions/" target="_blank">https://www.liberty-int.com/terms-and-conditions/</a></p>
+        <p>Direct link to Terms & Conditions for Purchase & Sales Services: <a href="https://www.liberty-int.com/Public/Dokumenty/Terms%20&%20Conditions%20for%20Purchase%20&%20Sale%20Services2017.pdf" target="_blank">T&C Purchase & Sales</a></p>
+        <p>Direct link to Terms & Conditions for Procurement Services: <a href="https://www.liberty-int.com/Public/Dokumenty/Terms%20&%20Conditions%20for%20Procurement%20Services2017.pdf" target="_blank">T&C Procurement</a></p>
+      </div>
+    </section>
+
+    <section class="card text-section">
+      <h2>CANCELLATION POLICY</h2>
+      <div class="compact-text">
+        <p>In case of cancellation by Client according to section 13.2 of the LITG Terms & Conditions, Liberty is entitled to a flat charge for damage compensation (Cancellation) in accordance with sections 13.3 through 13.6 of the LITG Terms & Condition. The parties agree on the following cancellation fees as a percentage of the contractually agreed total compensation:</p>
+        <p class="cancellation-terms">
+          <textarea id="cancellationTerms" class="cancellation-input" placeholder="TO BE ADVISED"></textarea>
+        </p>
+        <p>Relevant for the calculation of cancellation cost is Liberty's written receipt of the cancellation notice.</p>
+      </div>
+
+      <style>
+        .cancellation-terms {
+          margin: 0.5em 0 !important;
+        }
+
+        .cancellation-input {
+          width: 100%;
+          min-height: 60px;
+          padding: 0.5em;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-family: inherit;
+          font-size: 0.9em;
+          line-height: 1.2;
+          color: #dc3545;
+          background-color: transparent;
+          resize: vertical;
+        }
+
+        .cancellation-input::placeholder {
+          color: #dc3545;
+          font-weight: 600;
+          opacity: 1;
+        }
+
+        .cancellation-input:focus {
+          border-color: var(--accent-color);
+          outline: none;
+        }
+      </style>
+    </section>
+
+    <section class="card text-section">
+    <h2>PAYMENT TERMS</h2>
+      <div class="compact-text">
+        <p>Payments must be received in full in <span id="paymentCurrency">SEK</span>.</p>
+        <p><strong>Bank:</strong> LIBERTY NORDIC AB, Nordea, Stockholm</p>
+        <p><strong>IBAN:</strong> SE03 9500 0099 6042 1869 8738 | <strong>BIC:</strong> NDEASESS</p>
+        <p><strong>Deposit/Payment Schedule:</strong></p>
+        <div class="payment-schedule">
+          <div class="schedule-row">
+            <span class="schedule-text">Deposit of</span>
+            <select class="payment-percent" id="depositPercent">
+              <option value="10">10%</option>
+              <option value="20">20%</option>
+              <option value="30" selected>30%</option>
+              <option value="40">40%</option>
+              <option value="50">50%</option>
+            </select>
+            <span class="schedule-text">when confirming this proposal</span>
+          </div>
+          <div class="schedule-row">
+            <span class="schedule-text">Balance of</span>
+            <select class="payment-percent" id="finalPercent">
+              <option value="50">50%</option>
+              <option value="60">60%</option>
+              <option value="70" selected>70%</option>
+              <option value="80">80%</option>
+              <option value="90">90%</option>
+            </select>
+            <span class="schedule-text">due</span>
+            <select class="payment-timing" id="paymentTiming">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+            <span class="schedule-text">months ahead of arrival</span>
+          </div>
+        </div>
+        <p class="payment-note"><strong>Final Payment Settlement:</strong> Upon receipt of the final invoice, the balance will be calculated based on the revised budgets, with all previously paid deposits deducted from the total amount due.</p>
+      </div>
+
+      <style>
+        .payment-note {
+          margin-top: 0.5em !important;
+          padding: 0.5em 0 !important;
+          border-top: 1px solid #eee;
+          color: #333;
+          font-size: 0.85em !important;
+        }
+
+        .payment-schedule {
+          margin: 0.5em 0;
+        }
+
+        .schedule-row {
+          display: flex;
+          align-items: center;
+          gap: 0.3em;
+          margin: 0.2em 0;
+        }
+
+        .payment-percent, .payment-timing {
+          padding: 0.1em 0.2em;
+          border: 1px solid #dc3545;
+          border-radius: 3px;
+          font-family: inherit;
+          font-size: 0.85em;
+          color: #dc3545;
+          font-weight: 600;
+          background-color: transparent;
+          cursor: pointer;
+          width: 45px;
+        }
+
+        .payment-timing {
+          width: 30px;
+        }
+
+        .payment-percent:focus, .payment-timing:focus {
+          border-color: #dc3545;
+          outline: none;
+          box-shadow: 0 0 0 1px #dc3545;
+        }
+
+        .schedule-text {
+          font-size: 0.85em;
+          color: #333;
+        }
+
+        /* Style for the select dropdown arrow */
+        .payment-percent, .payment-timing {
+          appearance: none;
+          background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23dc3545%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.2em center;
+          background-size: 0.6em auto;
+          padding-right: 1em;
+        }
+      </style>
+
+      <script>
+        // Update payment currency when currency selection changes
+        document.addEventListener('DOMContentLoaded', function() {
+          const currencySelect = document.getElementById('currency');
+          const paymentCurrency = document.getElementById('paymentCurrency');
+          
+          // Initial update
+          paymentCurrency.textContent = currencySelect.value;
+          
+          // Update on currency change
+          currencySelect.addEventListener('change', function() {
+            paymentCurrency.textContent = this.value;
+          });
+
+          // Ensure deposit and final payment percentages always sum to 100%
+          const depositSelect = document.getElementById('depositPercent');
+          const finalSelect = document.getElementById('finalPercent');
+
+          depositSelect.addEventListener('change', function() {
+            const depositValue = parseInt(this.value);
+            finalSelect.value = (100 - depositValue).toString();
+          });
+
+          finalSelect.addEventListener('change', function() {
+            const finalValue = parseInt(this.value);
+            depositSelect.value = (100 - finalValue).toString();
+          });
+        });
+      </script>
+    </section>
+
+    <section class="card text-section">
+      <h2>APPLICABLE RATES</h2>
+      <div class="compact-text">
+        <div class="rates-info">
+          <p class="important-note">All rates in this quotation are:</p>
+          <ul>
+            <li>Quoted in <strong><span id="applicableRatesCurrency">SEK</span></strong></li>
+            <li>Net rates (non-commissionable unless otherwise stated)</li>
+            <li>Inclusive of all applicable taxes and service charges</li>
+          </ul>
+          
+          <p class="important-note">Important Notes:</p>
+          <ul>
+            <li>All rates are based on <strong><span id="ratesPaxCount">0</span> participants</strong></li>
+            <li>Liberty reserves the right to modify rates if the number of participants changes</li>
+            <li>Any extras on site will be billed at net cost + 15% Liberty fee (unless otherwise agreed)</li>
+            <li>Final payment will be adjusted based on revised budgets, less deposits already paid</li>
+            <li>All rates are subject to change in case of modifications in local fiscal policy or tax regulations</li>
+            <li>Offer validity is subject to availability at the time of confirmation by client</li>
+          </ul>
+        </div>
+      </div>
+
+      <style>
+        .rates-info {
+          padding: 0.5em 1em;
+          background-color: #f8f9fa;
+          border-radius: 4px;
+        }
+
+        .rates-info ul {
+          margin: 0.3em 0 1em 1.2em;
+          padding: 0;
+        }
+
+        .rates-info li {
+          font-size: 0.9em;
+          line-height: 1.4;
+          margin: 0.2em 0;
+          color: #333;
+        }
+
+        .important-note {
+          color: var(--primary-color);
+          font-weight: 600;
+          margin: 0.5em 0 0.2em 0;
+          font-size: 0.9em;
+        }
+
+        .rates-info strong {
+          color: var(--accent-color);
+        }
+      </style>
+
+      <script>
+        // Update applicable rates currency and pax count when they change
+        document.addEventListener('DOMContentLoaded', function() {
+          const currencySelect = document.getElementById('currency');
+          const applicableRatesCurrency = document.getElementById('applicableRatesCurrency');
+          const paxCountInput = document.getElementById('paxCount');
+          const ratesPaxCount = document.getElementById('ratesPaxCount');
+          
+          // Initial update
+          applicableRatesCurrency.textContent = currencySelect.value;
+          ratesPaxCount.textContent = paxCountInput.value || '0';
+          
+          // Update on currency change
+          currencySelect.addEventListener('change', function() {
+            applicableRatesCurrency.textContent = this.value;
+          });
+
+          // Update on pax count change
+          paxCountInput.addEventListener('input', function() {
+            ratesPaxCount.textContent = this.value || '0';
+          });
+        });
+      </script>
+    </section>
+
+    <section class="card text-section">
+    <h2>CONFIDENTIALITY NOTE</h2>
+      <div class="compact-text">
+        <p>This information is confidential and the sole property of LIBERTY NORDIC.</p>
+        <p>Any altering or additions without LIBERTY NORDIC's consent will make this document invalid.</p>
+      </div>
+    </section>
+
+    <section class="card text-section">
+    <h2>JURISDICTION</h2>
+      <div class="compact-text">
+        <p>The contractual relationship shall be subject to the laws of the country/ territory where the contracted services are being performed or provided, unless otherwise contractually agreed.</p>
+      </div>
+    </section>
+
+    <style>
+      .text-section {
+        margin-bottom: 1em;
+      }
+
+      .text-section h2 {
+        font-size: 0.9em;
+        color: var(--primary-color);
+        margin: 0;
+        padding: 0.5em 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .compact-text {
+        padding: 0.5em 0;
+      }
+
+      .compact-text p {
+        margin: 0;
+        padding: 0.2em 0;
+        line-height: 1.2;
+        font-size: 0.9em;
+      }
+
+      .compact-text a {
+        color: var(--accent-color);
+        text-decoration: none;
+      }
+
+      .compact-text a:hover {
+        text-decoration: underline;
+      }
+
+      .text-highlight {
+        color: var(--accent-color);
+        font-weight: 600;
+      }
+    </style>
+
+    <section class="card">
+      <div class="date-section">
+        <p><strong>DATE:</strong> <input type="date" id="quotationDate" value="2025-03-12" /></p>
+  </div>
+      <div class="contacts-grid">
+        <div class="contact-section">
+          <h3>CLIENT CONTACT NAME AND TITLE</h3>
+          <input type="text" id="clientContactName" class="contact-input" placeholder="Contact Name" />
+          <input type="text" id="clientContactTitle" class="contact-input" placeholder="Contact Title" />
+        </div>
+        <div class="contact-section">
+          <h3>LIBERTY CONTACT NAME AND TITLE</h3>
+          <p id="libertyContact" class="contact-info">Gérald Amoudruz, CEO</p>
+        </div>
+      </div>
+
+      <style>
+        .date-section {
+          margin-bottom: 2em;
+          padding: 1em;
+          border-bottom: 1px solid #eee;
+        }
+
+        .date-section p {
+          margin: 0;
+        }
+
+        .date-section input[type="date"] {
+          padding: 0.4em;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9em;
+        }
+
+        .contacts-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2em;
+          margin: 1em 0;
+        }
+
+        .contact-section {
+          padding: 1em;
+        }
+
+        .contact-section h3 {
+          font-size: 0.9em;
+          color: #666;
+          margin-bottom: 0.8em;
+          text-transform: uppercase;
+        }
+
+        .contact-input {
+          display: block;
+          width: 100%;
+          padding: 0.4em;
+          margin-bottom: 0.5em;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9em;
+        }
+
+        .contact-input:focus {
+          border-color: var(--accent-color);
+          outline: none;
+        }
+
+        .contact-info {
+          font-size: 1em;
+          color: #333;
+          font-weight: 600;
+        }
+      </style>
+    </section>
+
+  </div> <!-- Closing .container -->
+</div> <!-- Closing #pdf-content-wrapper -->
+
+    <!-- Save as PDF Button (Moved outside the wrapper) -->
+    <div style="text-align: center; margin: 2em;">
+        <button id="savePdfButton" type="button" style="padding: 0.8em 1.5em; background-color: var(--secondary-color); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 1.1em; font-weight: 600;">Save as PDF</button>
+        <p id="pdfStatus" style="margin-top: 0.5em; color: var(--primary-color); display: none;">Generating PDF...</p>
+  </div>
+
+
+  <footer>
+    <p>&copy; <span id="currentYear"></span> Liberty Nordic AB. All rights reserved.</p>
+    <p><a href="https://www.liberty-int.com/" target="_blank">www.liberty-int.com</a></p>
+    <p class="powered-by">Powered by Fjordesk</p>
+  </footer>
+
+  <style>
+    footer {
+      text-align: center;
+      padding: 1em;
+      margin-top: 2em;
+      border-top: 1px solid #eee;
+    }
+
+    footer p {
+      margin: 0.2em 0;
+      font-size: 0.85em;
+      color: #666;
+    }
+
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .powered-by {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-top: 0.5em !important;
+    }
+
+    @media print {
+      .powered-by {
+        position: fixed;
+        bottom: 10mm;
+        right: 10mm;
+        font-size: 8pt !important;
+      }
+    }
+  </style>
+
+  <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    const formFields = document.querySelectorAll('input[id], select[id], textarea[id]');
+    const formTableRows = document.querySelectorAll('#servicesTable tbody tr');
+    const storageKey = 'libertyQuotationFormState';
+
+    // --- Local Storage Functions ---
+    function saveFormState() {
+        const formData = {};
+        formFields.forEach(field => {
+            if (field.type === 'radio') {
+                 // Only save the value of the checked radio button in a group
+                 if (field.checked) {
+                    formData[field.name] = field.value;
+                 }
+            } else if (field.type === 'checkbox') { // Added checkbox support just in case
+                 formData[field.id] = field.checked;
+            }
+             else {
+                 formData[field.id] = field.value;
+            }
+        });
+         // Specific handling for table rows (assuming dynamic rows might be added later)
+         const tableData = [];
+         document.querySelectorAll('#servicesTable tbody tr').forEach((row, index) => {
+             const rowData = {};
+             row.querySelectorAll('input[id]').forEach(input => {
+                 // Extract base ID part (e.g., 'serviceDay' from 'serviceDay_1')
+                 const baseId = input.id.substring(0, input.id.lastIndexOf('_'));
+                 rowData[baseId] = input.value;
+             });
+             tableData.push(rowData);
+         });
+         formData['servicesTableData'] = tableData; // Store table data separately
+
+
+        try {
+            localStorage.setItem(storageKey, JSON.stringify(formData));
+            // console.log('Form state saved:', formData);
+        } catch (e) {
+            console.error('Error saving form state to local storage:', e);
+        }
+    }
+
+    function loadFormState() {
+        try {
+            const savedData = localStorage.getItem(storageKey);
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                // console.log('Loading form state:', formData);
+
+                formFields.forEach(field => {
+                     if (field.type === 'radio') {
+                         // Check the radio button whose value matches the saved value for the group name
+                         if (formData[field.name] === field.value) {
+                             field.checked = true;
+                         }
+                    } else if (field.type === 'checkbox') { // Added checkbox support
+                        field.checked = formData[field.id] || false;
+                    } else if (formData.hasOwnProperty(field.id)) {
+                         field.value = formData[field.id];
+                    }
+                });
+
+                 // Load table data
+                 if (formData.servicesTableData && Array.isArray(formData.servicesTableData)) {
+                     const tableRows = document.querySelectorAll('#servicesTable tbody tr');
+                     formData.servicesTableData.forEach((rowData, index) => {
+                         if (tableRows[index]) { // Check if row exists
+                             Object.keys(rowData).forEach(baseId => {
+                                 const input = tableRows[index].querySelector(`#${baseId}_${index + 1}`);
+                                 if (input) {
+                                     input.value = rowData[baseId];
+                                     // Recalculate total if it's a units or price input
+                                     if (baseId === 'serviceUnits' || baseId === 'servicePrice') {
+                                          calculateRowTotal(tableRows[index]);
+                                     }
+                                 }
+                             });
+                         }
+                     });
+                 }
+
+
+            }
+        } catch (e) {
+            console.error('Error loading form state from local storage:', e);
+        }
+    }
+
+    // --- Calculation Logic ---
+    function calculateRowTotal(row) {
+        // Use IDs consistent with how we save/load
+        const unitsInput = row.querySelector('input[id^="serviceUnits_"]');
+        const priceInput = row.querySelector('input[id^="servicePrice_"]');
+        const totalInput = row.querySelector('input[id^="serviceTotal_"]');
+
+        if (unitsInput && priceInput && totalInput) {
+            const units = parseFloat(unitsInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            totalInput.value = (units * price).toFixed(2);
+             // TODO: Update Costs Summary when row totals change
+        }
+    }
+
+    // --- Event Listeners ---
+
+    // Load state when the page is ready
+    document.addEventListener('DOMContentLoaded', loadFormState);
+
+    // Save state on input/change
+    formFields.forEach(field => {
+        field.addEventListener('input', saveFormState); // 'input' works well for text, number, textarea, select
+        if (field.type === 'radio' || field.type === 'checkbox') {
+             field.addEventListener('change', saveFormState); // Use 'change' for radio/checkbox
+        }
+    });
+
+     // Add event listeners to existing table rows for calculation and saving state
+    document.querySelectorAll('#servicesTable tbody tr').forEach(row => {
+        const inputs = row.querySelectorAll('input[type="number"][id^="serviceUnits_"], input[type="number"][id^="servicePrice_"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                calculateRowTotal(row);
+                saveFormState(); // Save state after calculation
+            });
+        });
+        // Also save state if text inputs in the table change
+        row.querySelectorAll('input[type="text"]').forEach(input => {
+             input.addEventListener('input', saveFormState);
+        });
+    });
+
+    // --- PDF Generation --- 
+    const savePdfButton = document.getElementById('savePdfButton');
+    const pdfStatus = document.getElementById('pdfStatus');
+    // --- Select the element to capture: Target the new wrapper div ---
+    const contentToCapture = document.getElementById('pdf-content-wrapper');
+
+    savePdfButton.addEventListener('click', () => {
+        if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+            console.error('Error: jsPDF or html2canvas library not loaded.');
+            pdfStatus.textContent = 'Error: Required libraries not loaded. Check console.';
+            pdfStatus.style.color = 'red';
+            pdfStatus.style.display = 'block';
+            return;
+        }
+
+        pdfStatus.textContent = 'Generating PDF...';
+        pdfStatus.style.color = 'var(--primary-color)';
+        pdfStatus.style.display = 'block';
+        savePdfButton.disabled = true;
+
+        const groupName = document.getElementById('groupName')?.value.replace(/[^a-zA-Z0-9\s]/g, '').trim() || 'Quotation';
+        const quoteNum = document.getElementById('quotationNumber')?.value || 'N';
+        const filename = `${groupName}_Quote_${quoteNum}.pdf`;
+
+        savePdfButton.parentElement.style.visibility = 'hidden';
+        contentToCapture.classList.add('pdf-rendering');
+
+        setTimeout(() => {
+            html2canvas(contentToCapture, {
+                scale: 2, // Increased scale for better quality
+                useCORS: true,
+                logging: true,
+                width: contentToCapture.offsetWidth,
+                height: contentToCapture.offsetHeight,
+                windowWidth: document.documentElement.scrollWidth,
+                windowHeight: document.documentElement.scrollHeight,
+                scrollY: 0,
+                scrollX: 0
+            }).then(canvas => {
+                savePdfButton.parentElement.style.visibility = 'visible';
+
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                const pdfWidth = 210; // A4 width in mm
+                const pdfHeight = 297; // A4 height in mm
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                
+                // Calculate scaling to fit width
+                const scale = pdfWidth / imgWidth;
+                const scaledHeight = imgHeight * scale;
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
+
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, scaledHeight, undefined, 'FAST');
+
+                // Save the PDF
+                pdf.save(filename);
+                console.log('PDF generated successfully');
+                pdfStatus.style.display = 'none';
+                savePdfButton.disabled = false;
+
+            }).catch(error => {
+                console.error('Error during PDF generation:', error);
+                savePdfButton.parentElement.style.visibility = 'visible';
+                pdfStatus.textContent = 'Error generating PDF. Check console.';
+                pdfStatus.style.color = 'red';
+                savePdfButton.disabled = false;
+            }).finally(() => {
+                contentToCapture.classList.remove('pdf-rendering');
+                savePdfButton.parentElement.style.visibility = 'visible';
+                savePdfButton.disabled = false;
+            });
+        }, 100);
+    });
+
+    // TODO: Add logic to calculate Costs Summary based on table totals and other inputs
+    // TODO: Implement 'Add Service Row' button functionality, ensuring new rows also get listeners via addTableRowListeners()
+
+    // Add these functions after the existing hotel-related JavaScript
+    function updateAllHotelNights(duration) {
+      const hotelRows = document.querySelectorAll('.hotel-row');
+      hotelRows.forEach(row => {
+        const nightsInput = row.querySelector('.nights');
+        if (nightsInput) {
+          nightsInput.value = duration;
+          nightsInput.classList.add('auto-populated');
+          calculateRowTotal(row);
+        }
+      });
+    }
+
+    // Date handling
+    const arrivalDate = document.getElementById('arrivalDate');
+    const departureDate = document.getElementById('departureDate');
+    const durationDays = document.getElementById('durationDays');
+
+    function updateDuration() {
+      if (arrivalDate.value && departureDate.value) {
+        const arrival = new Date(arrivalDate.value);
+        const departure = new Date(departureDate.value);
+        const duration = Math.ceil((departure - arrival) / (1000 * 60 * 60 * 24));
+        const nights = Math.max(0, duration - 1);
+        
+        if (duration > 0) {
+          durationDays.textContent = `${duration} days (${nights} nights)`;
+          // Update all hotel nights inputs with nights value
+          updateAllHotelNights(nights);
+        } else {
+          durationDays.textContent = '0 days (0 nights)';
+        }
+      }
+    }
+
+    // Add event listeners for date changes
+    arrivalDate.addEventListener('change', updateDuration);
+    departureDate.addEventListener('change', updateDuration);
+
+    // Room handling
+    const singleRooms = document.getElementById('singleRooms');
+    const doubleRooms = document.getElementById('doubleRooms');
+    const paxCount = document.getElementById('paxCount');
+
+    function updatePaxCount() {
+      const singles = parseInt(singleRooms.value) || 0;
+      const doubles = parseInt(doubleRooms.value) || 0;
+      paxCount.value = singles + (doubles * 2);
+    }
+
+    singleRooms.addEventListener('input', updatePaxCount);
+    doubleRooms.addEventListener('input', updatePaxCount);
+
+    // Destination autocomplete
+    const destinations = [
+      "Stockholm, Sweden",
+      "Gothenburg, Sweden",
+      "Malmö, Sweden",
+      "Copenhagen, Denmark",
+      "Oslo, Norway",
+      "Bergen, Norway",
+      "Helsinki, Finland",
+      "Tampere, Finland",
+      // Add more destinations as needed
+    ];
+
+    // Initialize autocomplete
+    $(document).ready(function() {
+      $("#destination").autocomplete({
+        source: destinations,
+        minLength: 2
+      });
+    });
+  </script>
+
+    <!-- Add page break marker -->
+    <div class="page-break" style="break-after: page;"></div>
+
+    <style>
+      /* PDF-specific styles */
+      @media print {
+        .page-break {
+          break-after: page;
+        }
+
+        #pdf-content-wrapper {
+          width: 210mm;  /* A4 width */
+          margin: 0 auto;
+        }
+
+        .card {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+      }
+
+      /* Adjust content wrapper for better PDF fitting */
+      #pdf-content-wrapper {
+        max-width: 210mm;  /* A4 width */
+        margin: 0 auto;
+        padding: 0;
+      }
+
+      /* Ensure costs summary stays together */
+      .costs-summary-wrapper {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    </style>
+
+    <script>
+      // Update PDF generation logic
+      savePdfButton.addEventListener('click', () => {
+        if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+            console.error('Error: jsPDF or html2canvas library not loaded.');
+            pdfStatus.textContent = 'Error: Required libraries not loaded. Check console.';
+            pdfStatus.style.color = 'red';
+            pdfStatus.style.display = 'block';
+            return;
+        }
+
+        pdfStatus.textContent = 'Generating PDF...';
+        pdfStatus.style.color = 'var(--primary-color)';
+        pdfStatus.style.display = 'block';
+        savePdfButton.disabled = true;
+
+        const groupName = document.getElementById('groupName')?.value.replace(/[^a-zA-Z0-9\s]/g, '').trim() || 'Quotation';
+        const quoteNum = document.getElementById('quotationNumber')?.value || 'N';
+        const filename = `${groupName}_Quote_${quoteNum}.pdf`;
+
+        savePdfButton.parentElement.style.visibility = 'hidden';
+        contentToCapture.classList.add('pdf-rendering');
+
+        setTimeout(() => {
+            html2canvas(contentToCapture, {
+                scale: 2, // Increased scale for better quality
+                useCORS: true,
+                logging: true,
+                width: contentToCapture.offsetWidth,
+                height: contentToCapture.offsetHeight,
+                windowWidth: document.documentElement.scrollWidth,
+                windowHeight: document.documentElement.scrollHeight,
+                scrollY: 0,
+                scrollX: 0
+            }).then(canvas => {
+                savePdfButton.parentElement.style.visibility = 'visible';
+
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                const pdfWidth = 210; // A4 width in mm
+                const pdfHeight = 297; // A4 height in mm
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                
+                // Calculate scaling to fit width
+                const scale = pdfWidth / imgWidth;
+                const scaledHeight = imgHeight * scale;
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
+
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, scaledHeight, undefined, 'FAST');
+
+                // Save the PDF
+                pdf.save(filename);
+                console.log('PDF generated successfully');
+                pdfStatus.style.display = 'none';
+                savePdfButton.disabled = false;
+
+            }).catch(error => {
+                console.error('Error during PDF generation:', error);
+                savePdfButton.parentElement.style.visibility = 'visible';
+                pdfStatus.textContent = 'Error generating PDF. Check console.';
+                pdfStatus.style.color = 'red';
+                savePdfButton.disabled = false;
+            }).finally(() => {
+                contentToCapture.classList.remove('pdf-rendering');
+                savePdfButton.parentElement.style.visibility = 'visible';
+                savePdfButton.disabled = false;
+            });
+        }, 100);
+    });
+
+    <script>
+      // Update PDF generation logic
+      savePdfButton.addEventListener('click', () => {
+        if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
+            console.error('Error: jsPDF or html2canvas library not loaded.');
+            pdfStatus.textContent = 'Error: Required libraries not loaded. Check console.';
+            pdfStatus.style.color = 'red';
+            pdfStatus.style.display = 'block';
+            return;
+        }
+
+        pdfStatus.textContent = 'Generating PDF...';
+        pdfStatus.style.color = 'var(--primary-color)';
+        pdfStatus.style.display = 'block';
+        savePdfButton.disabled = true;
+
+        const groupName = document.getElementById('groupName')?.value.replace(/[^a-zA-Z0-9\s]/g, '').trim() || 'Quotation';
+        const quoteNum = document.getElementById('quotationNumber')?.value || 'N';
+        const filename = `${groupName}_Quote_${quoteNum}.pdf`;
+
+        savePdfButton.parentElement.style.visibility = 'hidden';
+        contentToCapture.classList.add('pdf-rendering');
+
+        // Get all sections that should be on separate pages
+        const mainContent = document.querySelector('.container');
+        const pageBreaks = document.querySelectorAll('.page-break');
+        const sections = [];
+        let currentSection = [];
+        
+        // Split content into sections based on page breaks
+        Array.from(mainContent.children).forEach(element => {
+            if (element.classList.contains('page-break')) {
+                if (currentSection.length > 0) {
+                    sections.push(currentSection);
+                    currentSection = [];
+                }
+            } else {
+                currentSection.push(element);
+            }
+        });
+        if (currentSection.length > 0) {
+            sections.push(currentSection);
+        }
+
+        // Create PDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
+
+        // Function to capture and add section to PDF
+        const captureSection = async (sectionElements, isFirstPage) => {
+            // Create a temporary container
+            const container = document.createElement('div');
+            container.style.width = '210mm';
+            container.style.margin = '0';
+            container.style.padding = '0';
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            sectionElements.forEach(el => container.appendChild(el.cloneNode(true)));
+            document.body.appendChild(container);
+
+            try {
+                const canvas = await html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    width: container.offsetWidth,
+                    height: container.offsetHeight
+                });
+
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                const pdfWidth = 210; // A4 width in mm
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const scale = pdfWidth / imgWidth;
+                const scaledHeight = imgHeight * scale;
+
+                if (!isFirstPage) {
+                    pdf.addPage();
+                }
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, scaledHeight, undefined, 'FAST');
+
+                document.body.removeChild(container);
+            } catch (error) {
+                console.error('Error capturing section:', error);
+                document.body.removeChild(container);
+            }
+        };
+
+        // Process all sections
+        (async () => {
+            try {
+                for (let i = 0; i < sections.length; i++) {
+                    await captureSection(sections[i], i === 0);
+                }
+
+                // Save the complete PDF
+                pdf.save(filename);
+                console.log('PDF generated successfully');
+                pdfStatus.style.display = 'none';
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                pdfStatus.textContent = 'Error generating PDF. Check console.';
+                pdfStatus.style.color = 'red';
+            } finally {
+                savePdfButton.parentElement.style.visibility = 'visible';
+                contentToCapture.classList.remove('pdf-rendering');
+                savePdfButton.disabled = false;
+            }
+        })();
+    });
+    </script>
+
+    <style>
+      @media print {
+        .page-break {
+          break-after: page;
+          height: 0;
+          display: block;
+          margin: 0;
+        }
+
+        #pdf-content-wrapper {
+          width: 210mm;
+          margin: 0 auto;
+          padding: 0;
+        }
+
+        .card {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        /* Ensure first page content stays together */
+        .costs-summary-wrapper {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        /* Ensure sections stay together */
+        .text-section {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+      }
+
+      /* Adjust content wrapper for better PDF fitting */
+      #pdf-content-wrapper {
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: 0;
+      }
+    </style>
+
+    <style>
+      /* PDF-specific styles for better page fitting */
+      @media print {
+        /* General text size reduction */
+        body {
+          font-size: 9pt !important;
+          line-height: 1.2 !important;
+        }
+
+        /* Card styling */
+        .card {
+          margin: 0.3em 0 !important;
+          padding: 0.4em !important;
+          break-inside: avoid;
+        }
+
+        /* Table styling */
+        table {
+          font-size: 8.5pt !important;
+          margin: 0.2em 0 !important;
+        }
+
+        td, th {
+          padding: 0.2em 0.3em !important;
+        }
+
+        /* Input fields */
+        input, select, textarea {
+          font-size: 8.5pt !important;
+          padding: 0.1em 0.2em !important;
+        }
+
+        /* Headings */
+        h1 {
+          font-size: 14pt !important;
+          margin: 0.3em 0 !important;
+        }
+
+        h2 {
+          font-size: 11pt !important;
+          margin: 0.2em 0 !important;
+        }
+
+        /* Compact spacing */
+        p {
+          margin: 0.2em 0 !important;
+        }
+
+        /* List styling */
+        ul, ol {
+          margin: 0.2em 0 0.2em 1em !important;
+          padding-left: 0.5em !important;
+        }
+
+        li {
+          margin: 0.1em 0 !important;
+        }
+
+        /* Specific section adjustments */
+        .costs-summary-wrapper {
+          margin-bottom: 0 !important;
+        }
+
+        /* Page break control */
+        .page-break-before-gdpr {
+          break-before: page;
+        }
+
+        /* Ensure sections stay together */
+        .text-section {
+          break-inside: avoid;
+        }
+
+        /* Compact form fields */
+        .form-group {
+          margin: 0.2em 0 !important;
+        }
+
+        /* Adjust spacing for contact info */
+        .contact-info {
+          margin: 0.2em 0 !important;
+          padding: 0.2em !important;
+        }
+
+        /* Make dropdowns more compact */
+        .payment-percent, .payment-timing {
+          padding: 0.1em 0.2em !important;
+          font-size: 8.5pt !important;
+        }
+
+        /* Adjust table column widths */
+        colgroup col {
+          width: auto !important;
+        }
+      }
+
+      /* Add page break before GDPR section */
+      .gdpr-section {
+        break-before: page;
+      }
+    </style>
+
+    <!-- Add page break before GDPR section -->
+    <div class="page-break-before-gdpr"></div>
+
+    <script>
+      // Update PDF generation logic for better page handling
+      document.addEventListener('DOMContentLoaded', function() {
+        const gdprSection = document.querySelector('.gdpr-section');
+        if (gdprSection) {
+          gdprSection.classList.add('page-break-before-gdpr');
+        }
+      });
+    </script>
+</body>
+</html>

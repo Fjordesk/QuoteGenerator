@@ -1,0 +1,1076 @@
+:root {
+    --primary-color: #203864; /* Dark Blue */
+    --secondary-color: #f58220; /* Orange */
+    --accent-color: #4472c4; /* Lighter Blue */
+    --background-color: #f8f9fa; /* Light Gray */
+    --text-color: #333;
+    --border-color: #dee2e6;
+    --card-background: #ffffff;
+    --header-height: 150px; /* Adjust as needed */
+    --border-radius: 8px;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.4;
+    font-size: 12px; /* Reduced from 14px */
+  }
+
+  header {
+      height: var(--header-height);
+      background-image: url('InvoiceBanner.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: var(--primary-color);
+      display: flex; /* Optional: if you want to overlay text/logo */
+      align-items: center; /* Optional */
+      justify-content: center; /* Optional */
+      color: white; /* Optional: for any text overlay */
+  }
+
+
+  .ribbon {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: bold;
+    padding: 0.3em 0.6em; /* Reduced padding */
+    text-align: center;
+    font-size: 0.85em; /* Reduced */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .ribbon label {
+      color: #fff;
+      font-weight: bold;
+      margin-bottom: 0;
+      padding-right: 0.3em; /* Reduced padding */
+  }
+
+   .ribbon select {
+      padding: 0.2em 0.4em; /* Reduced padding further */
+      font-size: 0.9em; /* Made font slightly smaller */
+      font-weight: bold;
+      border: 1px solid #fff;
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+      color: #fff;
+      font-family: inherit;
+      width: auto;
+      min-width: 60px; /* Reduced min-width */
+      appearance: auto;
+      background-image: none;
+      margin-left: 0.2em;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 1em auto; /* Reduced margin */
+    padding: 0 1em; /* Reduced padding */
+  }
+
+  .card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1em 1.2em; /* Reduced padding */
+    margin-bottom: 1em; /* Reduced margin */
+  }
+
+  h2, h3 {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.2em; /* Reduced padding */
+    margin-top: 0;
+    margin-bottom: 0.6em; /* Reduced margin */
+  }
+
+  h2 {
+    font-size: 1.1em; /* Reduced from 1.2em */
+    font-weight: 700;
+    margin-bottom: 0.3em;
+  }
+
+  h3 {
+    font-size: 1em; /* Reduced from 1.1em */
+    font-weight: 600;
+    color: var(--accent-color);
+     border-bottom: 1px solid var(--accent-color);
+  }
+
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column */
+    gap: 0.6em; /* Reduced gap further */
+    margin-bottom: 0.8em; /* Reduced margin further */
+  }
+
+  /* Apply two-column layout for wider screens */
+  @media (min-width: 768px) {
+    .grid-two-col {
+      /* Reduce label width and overall gap for the specific first section */
+      &.compact-section {
+          grid-template-columns: 180px 1fr; /* Tighter label column */
+          gap: 0.4em 0.8em; /* Tighter vertical and horizontal gap */
+      }
+      grid-template-columns: 220px 1fr; /* Default Label column and input column */
+      align-items: center; /* Vertically align label and input */
+    }
+     .summary-grid {
+       grid-template-columns: auto 1fr; /* Auto width for label, rest for input */
+       gap: 0.5em 1em; /* Adjust summary gap slightly */
+    }
+  }
+
+
+  label {
+    font-weight: 600;
+    color: var(--primary-color);
+    padding-top: 0.2em; /* Add slight padding to vertically align better with smaller inputs */
+    padding-bottom: 0.2em;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.6em; /* Reduced padding */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-sizing: border-box; /* Include padding and border in element's total width/height */
+    font-family: inherit;
+    font-size: 1em;
+    transition: border-color 0.2s ease-in-out;
+  }
+
+  input:focus, select:focus, textarea:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(245, 130, 32, 0.2); /* Subtle focus ring */
+  }
+
+
+  select {
+      appearance: none; /* Remove default arrow */
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+      background-repeat: no-repeat;
+      background-position: right .7em top 50%;
+      background-size: .65em auto;
+      padding-right: 2.5em; /* Make space for the arrow */
+  }
+
+  .commission-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6em; /* Reduced gap */
+  }
+
+  .commission-options div {
+      display: flex;
+      align-items: center;
+      gap: 0.4em; /* Reduced gap */
+  }
+
+
+  input[type="radio"] {
+    margin-right: 0.4em; /* Reduced margin */
+    accent-color: var(--secondary-color); /* Style radio button color */
+  }
+
+  input[type="radio"] + label {
+     font-weight: normal; /* Normal weight for radio labels */
+     color: var(--text-color);
+  }
+
+  .commission-options input[type="text"] {
+      width: 80px; /* Smaller width for percentage input */
+      display: inline-block; /* Allow inline display */
+      margin-left: 0.5em;
+      margin-right: 0.2em;
+  }
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.4em; /* Reduced from 1.5em */
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+
+  th, td {
+    border: 1px solid var(--border-color);
+    padding: 0.6em 0.8em; /* Reduced padding */
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9em;
+  }
+
+  tbody tr:nth-child(even) {
+      background-color: #f2f2f2; /* Subtle striping for readability */
+  }
+
+  tbody tr:hover {
+      background-color: #e9ecef; /* Hover effect */
+  }
+
+  td input[type="text"],
+  td input[type="number"] {
+      padding: 0.4em; /* Reduced padding */
+      font-size: 0.9em; /* Slightly smaller */
+  }
+
+  input[readonly] {
+      background-color: #e9ecef; /* Indicate readonly fields */
+      cursor: not-allowed;
+  }
+
+  .text-section p {
+      margin-bottom: 0.8em; /* Reduced margin */
+  }
+
+  .text-section strong {
+      color: var(--primary-color);
+  }
+
+   footer {
+    text-align: center;
+    margin-top: 3em;
+    padding: 1.5em;
+    font-size: 0.85em; /* Reduced from 0.9em */
+    color: #6c757d;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--card-background);
+  }
+
+  footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+  }
+  footer a:hover {
+      text-decoration: underline;
+  }
+
+   /* Utility Classes */
+  .text-highlight {
+      color: var(--secondary-color);
+      font-weight: bold;
+  }
+
+  .text-muted {
+     margin: 0;
+     font-size: 0.85em; /* Reduced from 0.9em */
+     color: #6c757d;
+  }
+
+  /* Add these styles after the existing .grid-two-col styles */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 0.8em 0;
+  }
+
+  .compact-section {
+    margin: 0.4em 0;
+  }
+
+  .no-margin {
+    margin: 0;
+  }
+
+  .commission-options.compact-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+    padding: 0.2em 0;
+  }
+
+  .commission-options.compact-section > div {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .commission-options.compact-section input[type="radio"] {
+    margin: 0;
+  }
+
+  .commission-options.compact-section input[type="number"] {
+    padding: 0.2em 0.4em;
+    margin: 0 0.2em;
+  }
+
+  .text-highlight {
+    margin: 0;
+    font-weight: bold;
+    color: var(--secondary-color);
+  }
+
+  @media (min-width: 768px) {
+    .grid-two-col.compact-section {
+      gap: 0.4em 0.8em;
+    }
+  }
+
+  /* Add these new styles */
+  .section-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9em; /* Reduced from 0.95em */
+    margin-bottom: 0.2em;
+  }
+
+  .currency-select-wrapper {
+    display: inline-block;
+    width: auto;
+  }
+
+  .compact-select {
+    padding: 0.2em 1.5em 0.2em 0.4em !important;
+    font-size: 0.9em !important;
+    height: 2em !important;
+    min-width: 5em !important;
+    width: auto !important;
+  }
+
+  select.compact-select {
+    background-position: right 0.3em top 50% !important;
+    background-size: 0.5em auto !important;
+  }
+
+  /* Add these styles */
+  .dates-container {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .date-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    flex-wrap: wrap;
+  }
+
+  .date-input {
+    width: auto;
+    min-width: 130px;
+  }
+
+  .duration-display {
+    color: var(--accent-color);
+    font-size: 0.9em;
+    white-space: nowrap;
+  }
+
+  .rooms-container {
+    width: 100%;
+  }
+
+  .room-inputs {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+  }
+
+  .room-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .small-label {
+    color: var(--text-color);
+    font-size: 0.9em;
+    font-weight: normal;
+  }
+
+  .small-input {
+    width: 70px;
+    padding: 0.3em;
+  }
+
+  /* Autocomplete styling */
+  .ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+  }
+
+  .room-type-select {
+    width: 50% !important;
+    min-width: 120px !important;
+  }
+
+  .room-type-select:focus {
+    border-color: var(--accent-color);
+    background: white;
+    outline: none;
+  }
+
+  /* Update nights input styling */
+  input.nights {
+    background-color: #fff;
+    cursor: text;
+    color: var(--text-color);
+    border: 1px solid transparent;
+  }
+
+  input.nights:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+
+  /* Add a subtle indicator that the field is auto-populated but editable */
+  input.nights.auto-populated {
+    border-left: 3px solid var(--accent-color);
+  }
+
+  /* Add styles for room management */
+  .hotel-actions {
+    background-color: #f8f9fa;
+  }
+
+  .hotel-actions td {
+    padding: 0.3em 0.5em;
+  }
+
+  .add-room-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .add-room-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+  }
+
+  .remove-room-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 0.1em 0.3em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    float: right;
+  }
+
+  .remove-room-btn:hover {
+    opacity: 1;
+  }
+
+  .remove-room-btn[disabled] {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Add styles for room type cell */
+  .hotels-table .room-type-cell {
+    display: flex;
+    gap: 0.4em;
+  }
+
+  .hotels-table .room-type-select {
+    width: 120px !important;
+    min-width: 120px !important;
+  }
+
+  .hotels-table .room-description {
+    flex: 1;
+  }
+
+  .hotels-table .action-cell {
+    position: relative !important;
+    padding-right: 25px !important;
+  }
+
+  .hotels-table .remarks {
+    width: calc(100% - 30px) !important;
+    padding: 0.3em !important;
+    border: 1px solid var(--border-color) !important;
+  }
+
+  .hotels-table .remove-room-btn {
+    position: absolute !important;
+    right: 5px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+
+  /* Update table column widths */
+  .hotels-table colgroup {
+    display: table-column-group;
+  }
+
+  .hotels-table colgroup col:nth-child(1) { width: 35%; } /* Room type column */
+  .hotels-table colgroup col:nth-child(2) { width: 10%; } /* Nights column */
+  .hotels-table colgroup col:nth-child(3) { width: 10%; } /* Units column */
+  .hotels-table colgroup col:nth-child(4) { width: 12%; } /* Price column */
+  .hotels-table colgroup col:nth-child(5) { width: 13%; } /* Total column */
+  .hotels-table colgroup col:nth-child(6) { width: 20%; } /* Remarks column */
+
+  .hotel-component {
+    display: table-row-group;
+  }
+
+  /* Ensure proper borders between hotels */
+  .hotel-component + .hotel-component {
+    border-top: 2px solid var(--border-color);
+  }
+
+  .action-cell {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5em !important;
+    padding: 0.4em 0.5em !important;
+  }
+
+  .remarks {
+    flex: 1 !important;
+    min-width: 0 !important;
+    margin-right: 0.5em !important;
+  }
+
+  .remove-room-btn {
+    flex-shrink: 0 !important;
+  }
+
+  /* Add these styles for the remarks column */
+  .remarks-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .remarks-input {
+    width: calc(100% - 25px);
+    padding: 0.3em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+  }
+
+  .remarks-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+
+  .remove-room-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0.1em 0.3em;
+    font-size: 1.1em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .remove-room-btn:hover {
+    opacity: 1;
+  }
+
+  .room-type-select {
+    width: 130px;
+  }
+
+  /* Update styles for hotel header remarks */
+  .hotel-header .remarks-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .hotel-header .remarks-input {
+    width: calc(100% - 25px);
+    padding: 0.3em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 4px;
+  }
+
+  .hotel-header .remarks-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .hotel-header .remarks-input:focus {
+    border-color: var(--secondary-color);
+    background: rgba(255, 255, 255, 0.15);
+    outline: none;
+  }
+
+  .delete-hotel-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.1em 0.3em;
+    font-size: 1.1em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .delete-hotel-btn:hover {
+    opacity: 1;
+  }
+
+  .services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+
+  .day-header {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .day-header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.15em 0.3em;
+    min-height: 2em;
+  }
+
+  .day-header .header-input {
+    flex: 1;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9em;
+    background: transparent;
+    border: none;
+    padding: 0.1em 0;
+  }
+
+  .day-header .header-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .day-actions {
+    background-color: #f8f9fa;
+  }
+
+  .add-service-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .add-service-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+  }
+
+  .add-day-button {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+
+  .add-day-button:hover {
+    opacity: 0.9;
+  }
+
+  .service-row input {
+    width: 100%;
+    padding: 0.3em;
+    border: 1px solid transparent;
+  }
+
+  .service-row input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+
+  /* Styles for services section */
+  .services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+  }
+
+  .day-header {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .day-header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.15em 0.3em;
+    min-height: 2em;
+  }
+
+  .day-header .header-input {
+    flex: 1;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9em;
+    background: transparent;
+    border: none;
+    padding: 0.1em 0;
+  }
+
+  .day-header .header-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .day-actions {
+    background-color: #f8f9fa;
+  }
+
+  .add-service-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .add-service-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+  }
+
+  .add-day-button {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+  }
+
+  .add-day-button:hover {
+    opacity: 0.9;
+  }
+
+  .service-row input {
+    width: 100%;
+    padding: 0.3em;
+    border: 1px solid transparent;
+  }
+
+  .service-row input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+
+  .day-component .remarks-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .day-component .remarks-input {
+    width: calc(100% - 25px);
+    padding: 0.3em;
+    border: 1px solid transparent;
+  }
+
+  .day-component .remarks-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+
+  .day-component .delete-day-btn,
+  .day-component .remove-service-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0.1em 0.3em;
+    font-size: 1.1em;
+    opacity: 0.7;
+  }
+
+  .day-header .delete-day-btn {
+    color: white;
+  }
+
+</style>
+<!-- Add styles for PDF rendering -->
+<style>
+  .pdf-plain-text {
+      /* Default state - no special styles needed */
+  }
+  .pdf-rendering .pdf-plain-text {
+      border: none !important;
+      background: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      color: var(--text-color) !important;
+      width: auto !important;
+      display: inline !important;
+      font-family: inherit !important;
+      font-size: inherit !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      opacity: 1 !important;
+      position: static !important;
+  }
+  /* Adjust grid layout slightly for PDF view if needed */
+  .pdf-rendering .grid-two-col {
+      align-items: baseline; /* Align label and text nicely */
+      gap: 0.5em 0.8em; /* Reduce vertical and horizontal gap significantly */
+      margin-bottom: 0.5em; /* Reduce margin between rows */
+      line-height: 1.3; /* Slightly tighter line height */
+  }
+  /* Ensure input values are visible in PDF */
+  .pdf-rendering input[type="text"],
+  .pdf-rendering input[type="number"],
+  .pdf-rendering select {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      background: transparent !important;
+      border: none !important;
+      color: inherit !important;
+      font: inherit !important;
+      opacity: 1 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+  /* Keep select dropdown arrow hidden in PDF */
+  .pdf-rendering select {
+      background-image: none !important;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 0.4em 0; /* Reduced from 0.8em */
+  }
+
+  .hotels-table .services-table  {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85em; /* Reduced from 0.9em */
+  }
+
+  .hotels-table th {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.5em;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .hotels-table td {
+    padding: 0.4em 0.5em;
+    border: 1px solid var(--border-color);
+  }
+
+  .hotels-table input:not([type="radio"]) {
+    width: 100%;
+    padding: 0.3em;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: inherit;
+    font-family: inherit;
+  }
+
+  .hotels-table input:focus {
+    border-color: var(--accent-color);
+    background: white;
+    outline: none;
+  }
+
+  .hotels-table .hotel-header {
+    background-color: var(--primary-color);
+  }
+
+  .hotel-header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.15em 0.3em; /* Reduced padding */
+    min-height: 2em; /* Set minimum height */
+  }
+
+  .hotels-table .hotel-header input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    color: white !important;
+    font-weight: 600;
+    font-size: 0.9em; /* Reduced from 0.95em */
+    background: transparent;
+    border: none;
+    padding: 0.1em 0;
+  }
+
+  .hotels-table .hotel-header input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .hotel-selector {
+    margin: 0;
+    cursor: pointer;
+    transform: scale(0.9); /* Slightly smaller radio button */
+  }
+
+  .url-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 0.2em;
+  }
+
+  .url-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    padding: 0.3em 0.5em;
+    font-size: 1em;
+    opacity: 0.9;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .url-icon:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .hotel-url {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 3px;
+    font-size: 0.85em !important; /* Reduced from 0.9em */
+    width: 250px !important;
+    color: white !important;
+    padding: 0.1em 0.3em !important;
+  }
+
+  .hotel-url::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .hotel-url:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+  }
+
+  .action-cell {
+    width: 30px;
+    text-align: right;
+    padding-right: 0.4em !important;
+  }
+
+  .delete-hotel-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 0.1em 0.3em;
+    opacity: 0.8;
+    line-height: 1;
+    float: right;
+  }
+
+  .hotels-table .total-row {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: bold;
+  }
+
+  .hotels-table .total-row td {
+    padding: 0.4em 0.5em;
+  }
+
+  #totalLabel {
+    text-align: right;
+    padding-right: 1em !important;
+  }
+
+  #grandTotal {
+    text-align: right;
+    color: var(--secondary-color);
+    font-weight: bold;
+    background-color: white;
+  }
+
+  .add-hotel-button {
+    margin-top: 1em;
+    padding: 0.5em 1em; /* Reduced padding */
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em; /* Added smaller font size */
+  }
+
+  .add-hotel-button:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .hotels-table {
+      font-size: 0.8em; /* Reduced from 0.85em */
+    }
+    
+    .hotels-table td, 
+    .hotels-table th {
+      padding: 0.3em 0.4em;
+    }
+  }
