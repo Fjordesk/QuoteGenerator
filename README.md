@@ -60,8 +60,9 @@ git checkout -b issue/#6-generate-pdf-invoice
 3. Commit and push regularly to your feature branch.
 
 4. Open a **Pull Request to the `develop` branch** for review and merging.
-5. https://www.youtube.com/watch?v=TKJ4RdhyB5Y
 
+https://www.youtube.com/watch?v=TKJ4RdhyB5Y
+https://www.youtube.com/watch?v=FDXSgyDGmho
 ---
 
 ## 👥 Contribution Guidelines
