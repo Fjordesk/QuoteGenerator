@@ -68,6 +68,21 @@ git checkout -b issue/#6-generate-pdf-invoice
 - [Create a new Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from the branch where you've committed your solution to the default branch of this repository. 
 - Please do not merge the created Pull Request.
 
+## 💡 How to Attach in the PR Description
+If you're uploading directly to GitHub
+Just drag and drop the image in the PR comment box — GitHub will generate the image URL automatically.
+
+Or paste directly from your clipboard (works like magic!).
+
+### 🔍 Screenshot
+```
+Before:
+![before](https://via.placeholder.com/400x200?text=Old+Version)
+
+After:
+![after](https://via.placeholder.com/400x200?text=New+Version)
+```
+
 ## 👥 Contribution Guidelines
 
 - Use feature branches
