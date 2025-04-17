@@ -24,18 +24,18 @@
     <label for="quotationNumber">QUOTATION #</label>
     <select id="quotationNumber" name="quotationNumber">
         <option value="1">1</option>
-        <option value="2" selected>2</option> <!-- Default to 2 as per original -->
+        <option value="2" selected>2</option> 
         <option value="3">3</option>
         <option value="4">4</option>
         <option value="5">5</option>
-        <!-- Add more options as needed -->
+  
     </select>
   </div>
 
   <div class="container">
     <section class="card">
       <div class="grid grid-two-col compact-section">
-      <label for="groupName">GROUP NAME:</label>
+        <label for="groupName">GROUP NAME:</label>
         <input type="text" id="groupName" name="groupName" class="pdf-plain-text" value="#12871SE - AD Medic Tours" />
 
       <label for="destination">DESTINATION:</label>
@@ -75,8 +75,15 @@
         <label for="clientContact">CLIENT CONTACT:</label>
         <input type="text" id="clientContact" class="pdf-plain-text" value="Rita Luis" />
 
-        <label for="libertyContact">LIBERTY CONTACT:</label>
-        <input type="text" id="libertyContact" class="pdf-plain-text" value="Gérald Amoudruz, CEO" />
+        <label for="projectManager">PROJECT MANAGER:</label>
+        <select id="projectManager" name="projectManager" class="pdf-plain-text">
+          <option value="pm1">Project Manager 1</option>
+          <option value="pm2">Project Manager 2</option>
+          <option value="pm3">Project Manager 3</option>
+          <option value="pm4">Project Manager 4</option>
+          <option value="pm5">Project Manager 5</option>
+        </select>
+        
     </div>
 
       <hr class="section-divider" />
