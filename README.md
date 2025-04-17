@@ -56,14 +56,17 @@ Example:
 ```bash
 git checkout -b issue/#6-generate-pdf-invoice
 ```
-
 3. Commit and push regularly to your feature branch.
 
 4. Open a **Pull Request to the `develop` branch** for review and merging.
 
-https://www.youtube.com/watch?v=TKJ4RdhyB5Y
-https://www.youtube.com/watch?v=FDXSgyDGmho
+- https://www.youtube.com/watch?v=TKJ4RdhyB5Y
+- https://www.youtube.com/watch?v=FDXSgyDGmho
 ---
+## When you are done
+
+- [Create a new Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from the branch where you've committed your solution to the default branch of this repository. 
+- Please do not merge the created Pull Request.
 
 ## 👥 Contribution Guidelines
 
