@@ -35,10 +35,13 @@
   <div class="container">
     <section class="card">
       <div class="grid grid-two-col compact-section">
-      <label for="groupName">GROUP NAME:</label>
-        <input type="text" id="groupName" name="groupName" class="pdf-plain-text" value="#12871SE - AD Medic Tours" />
+        <label for="groupNumber">GROUP NUMBER:</label>
+        <input type="text" id="groupNumber" class="pdf-plain-text" value="#12871SE" />
 
-      <label for="destination">DESTINATION:</label>
+        <label for="groupName">GROUP NAME:</label>
+        <input type="text" id="groupName" class="pdf-plain-text" value="AD Medic Tours" />
+
+        <label for="destination">DESTINATION:</label>
         <input type="text" id="destination" name="destination" class="pdf-plain-text destination-autocomplete" value="Gothenburg, Sweden" />
 
         <label>DATES:</label>
@@ -69,15 +72,51 @@
           </div>
         </div>
 
-      <label for="incomingContact">INCOMING CONTACT:</label>
+        <label for="incomingContact">INCOMING CONTACT:</label>
         <input type="text" id="incomingContact" name="incomingContact" class="pdf-plain-text" value="Gérald Amoudruz" />
 
         <label for="clientContact">CLIENT CONTACT:</label>
         <input type="text" id="clientContact" class="pdf-plain-text" value="Rita Luis" />
 
-        <label for="libertyContact">LIBERTY CONTACT:</label>
-        <input type="text" id="libertyContact" class="pdf-plain-text" value="Gérald Amoudruz, CEO" />
-    </div>
+        <!-- Removed LIBERTY CONTACT and replaced with PROJECT MANAGER DROPDOWN -->
+
+          <label for="projectManager">PROJECT MANAGER:</label>
+          <select id="projectManager" class="pdf-plain-text">
+            <option value="pm1">Project Manager 1</option>
+            <option value="pm2">Project Manager 2</option>
+            <option value="pm3">Project Manager 3</option>
+            <option value="pm4">Project Manager 4</option>
+            <option value="pm5">Project Manager 5</option>
+          </select>
+
+          <style>
+          .hotel-header-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.3em 0.6em;
+            position: relative;
+          }
+
+          .hotel-header .hotel-selector {
+            margin-right: 0.5em;
+            position: relative;
+            z-index: 2;
+          }
+
+          .hotel-header .header-input {
+            flex: 1;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.3em;
+            position: relative;
+            z-index: 1;
+            pointer-events: auto;
+          }
+          </style>
+
+      </div>
 
       <hr class="section-divider" />
 
@@ -89,13 +128,13 @@
         <div class="currency-select-wrapper">
           <select id="currency" class="compact-select">
               <option selected>SEK</option>
-        <option>DKK</option>
-        <option>NOK</option>
-        <option>EUR</option>
-        <option>USD</option>
-        <option>GBP</option>
-      </select>
-    </div>
+              <option>DKK</option>
+              <option>NOK</option>
+              <option>EUR</option>
+              <option>USD</option>
+              <option>GBP</option>
+          </select>
+        </div>
         <label></label>
         <p class="text-muted no-margin">VAT NOT RECLAIMED</p>
         <label></label>
@@ -106,14 +145,14 @@
 
       <div class="commission-options compact-section">
         <div>
-            <input type="radio" id="nonCommission" name="commission" value="non" checked />
-            <label for="nonCommission">NON COMMISSIONABLE RATES</label>
+          <input type="checkbox" id="nonCommission" name="commission" value="non" checked />
+          <label for="nonCommission">NON COMMISSIONABLE RATES</label>
         </div>
         <div>
-            <input type="radio" id="commissionable" name="commission" value="yes" />
-            <label for="commissionable">COMMISSIONABLE RATES:</label>
-            <span>Commissionable at: <input type="number" id="commissionRate" style="width: 70px;" value="0" min="0" max="100" step="0.1" /> %</span>
-            <span class="text-muted">(only if applicable to all below rates)</span>
+          <input type="checkbox" id="commissionable" name="commission" value="yes" />
+          <label for="commissionable">COMMISSIONABLE RATES:</label>
+          <span>Commissionable at: <input type="number" id="commissionRate" style="width: 70px;" value="0" min="0" max="100" step="0.1" /> %</span>
+          <span class="text-muted">(only if applicable to all below rates)</span>
         </div>
       </div>
     </section>
@@ -130,16 +169,16 @@
             <col style="width: 13%">
             <col style="width: 20%"> <!-- Remarks column -->
           </colgroup>
-      <thead>
-        <tr>
+          <thead>
+            <tr>
               <th>HOTELS</th>
               <th>Nights</th>
               <th>Units</th>
               <th>Price per unit</th>
               <th>Total</th>
               <th>Remarks</th>
-        </tr>
-      </thead>
+            </tr>
+          </thead>
           <tbody id="hotelsTableBody">
             <!-- Template row that will be cloned by JavaScript -->
             <template id="hotelRowTemplate">
@@ -165,14 +204,14 @@
                     <button class="remove-room-btn" title="Remove Room">&times;</button>
                   </div>
                 </td>
-        </tr>
+              </tr>
             </template>
 
             <template id="hotelComponentTemplate">
               <tr class="hotel-header">
                 <td colspan="5">
                   <div class="hotel-header-content">
-                    <input type="radio" name="selectedHotel" class="hotel-selector" />
+                    <input type="checkbox" class="hotel-selector" />
                     <input type="text" class="header-input" placeholder="HOTEL NAME" />
                     <div class="url-container">
                       <button class="url-icon" title="Add Hotel URL">🔗</button>
@@ -193,7 +232,7 @@
                 </td>
               </tr>
             </template>
-      </tbody>
+          </tbody>
           <tfoot>
             <tr class="total-row">
               <td colspan="4" id="totalLabel" style="background-color: #1a237e; color: white; padding-left: 1em;">HOTEL COST BASED ON SELECTED HOTEL</td>
@@ -201,7 +240,7 @@
               <td></td>
             </tr>
           </tfoot>
-    </table>
+        </table>
       </div>
 
       <button type="button" id="addHotelBtn" class="add-hotel-button">
@@ -362,7 +401,7 @@
             <option value="meal">Photogragher</option>
             <option value="meal">Speaker</option>
             <option value="activity">Activity</option>
-        </select>
+          </select>
           <input type="text" class="service-description" placeholder="Additional Description" />
         </td>
         <td><input type="number" class="days" min="1" /></td>
@@ -1162,7 +1201,7 @@
       <h2>GDPR - DATA PROTECTION</h2>
       <div class="compact-text">
         <p>The General Data Protection Regulation (GDPR) (EU) 2016/679 is a regulation in EU law on data protection and privacy for all individuals within the European Union. We take the GDPR very serious and therefore our Data Processing Addendum is accessible worldwide via this direct link: <a href="https://www.liberty-int.com/docs/LITG-Data-Processing-Addendum.pdf" target="_blank">Data Processing Addendum</a></p>
-    </div>
+      </div>
       <style>
         .gdpr-section {
           background-color: #f8f9fa;
@@ -1505,7 +1544,7 @@
     <section class="card">
       <div class="date-section">
         <p><strong>DATE:</strong> <input type="date" id="quotationDate" value="2025-03-12" /></p>
-  </div>
+      </div>
       <div class="contacts-grid">
         <div class="contact-section">
           <h3>CLIENT CONTACT NAME AND TITLE</h3>
@@ -1584,7 +1623,7 @@
     <div style="text-align: center; margin: 2em;">
         <button id="savePdfButton" type="button" style="padding: 0.8em 1.5em; background-color: var(--secondary-color); color: white; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 1.1em; font-weight: 600;">Save as PDF</button>
         <p id="pdfStatus" style="margin-top: 0.5em; color: var(--primary-color); display: none;">Generating PDF...</p>
-  </div>
+    </div>
 
 
   <footer>
